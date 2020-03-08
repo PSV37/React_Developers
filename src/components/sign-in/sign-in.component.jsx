@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import FormInput from '../form-input/form-input.component';
 import './sign-in.style.scss';
 import CustomButton from '../custom-button/custom-button.component';
-import { signInWithGoogle } from '../../firebase/firebase.utils';
+import { signInWithGoogle, auth } from '../../firebase/firebase.utils';
 
 class SignIn extends Component {
   constructor(props) {
@@ -11,16 +11,30 @@ class SignIn extends Component {
     this.state = {
       email: '',
       password: '',
+      errorMsg: '',
+      isError: false,
     };
   }
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
 
-    this.setState({
-      email: '',
-      password: '',
-    });
+    const { email, password } = this.state;
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+
+      this.setState({
+        email: '',
+        password: '',
+      });
+    } catch (error) {
+      this.setState({
+        isError: true,
+        errorMsg: error.message,
+      });
+      console.log(error.message);
+      console.log({ error });
+    }
   };
 
   handleOnchange = event => {
@@ -30,11 +44,31 @@ class SignIn extends Component {
   };
 
   render() {
-    const { email, password } = this.state;
+    const { email, password, isError, errorMsg } = this.state;
     return (
       <div className="sign-in">
         <h2>I alreaddy have Account</h2>
         <small>Sign in with your email and password</small>
+        {isError ? (
+          <div>
+            <div
+              className="alert alert-danger alert-dismissible"
+              style={{
+                fontSize: 'small',
+                height: '50px',
+                padding: '6px 10px 6px 16px',
+                width: '97%',
+              }}
+            >
+              <button type="button" className="close" data-dismiss="alert">
+                &times;
+              </button>
+              <strong>OOP's!</strong> {errorMsg}
+            </div>
+          </div>
+        ) : (
+          ''
+        )}
 
         <div>
           <form onSubmit={this.handleSubmit}>
