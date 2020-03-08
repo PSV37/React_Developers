@@ -56,7 +56,7 @@ class SignUp extends Component {
         <h2 className="title">I do not have a Account</h2>
         <small>Sign in with your email and password</small>
         <div>
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit} style={{ width: '147%' }}>
             <FormInput
               type="text"
               name="displayName"

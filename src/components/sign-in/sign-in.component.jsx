@@ -49,7 +49,7 @@ class SignIn extends Component {
       <div className="sign-in">
         <h2>I alreaddy have Account</h2>
         <small>Sign in with your email and password</small>
-        {isError ? (
+        {/* {isError ? (
           <div>
             <div
               className="alert alert-danger alert-dismissible"
@@ -68,7 +68,7 @@ class SignIn extends Component {
           </div>
         ) : (
           ''
-        )}
+        )} */}
 
         <div>
           <form onSubmit={this.handleSubmit}>
