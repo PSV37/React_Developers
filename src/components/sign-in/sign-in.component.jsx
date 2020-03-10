@@ -36,7 +36,26 @@ class SignIn extends Component {
       console.log({ error });
     }
   };
+  handleSubmit1 = async e => {
+    e.preventDefault();
 
+    const { email, password } = this.state;
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+
+      this.setState({
+        email: '',
+        password: '',
+      });
+    } catch (error) {
+      this.setState({
+        isError: true,
+        errorMsg: error.message,
+      });
+      console.log(error.message);
+      console.log({ error });
+    }
+  };
   handleOnchange = event => {
     const { value, name } = event.target;
 
@@ -49,7 +68,7 @@ class SignIn extends Component {
       <div className="sign-in">
         <h2>I alreaddy have Account</h2>
         <small>Sign in with your email and password</small>
-        {/* {isError ? (
+        {isError ? (
           <div>
             <div
               className="alert alert-danger alert-dismissible"
@@ -68,7 +87,7 @@ class SignIn extends Component {
           </div>
         ) : (
           ''
-        )} */}
+        )}
 
         <div>
           <form onSubmit={this.handleSubmit}>
@@ -89,7 +108,10 @@ class SignIn extends Component {
             />
 
             <div className="buttons">
-              <CustomButton type="submit"> Submit Form </CustomButton>
+              <CustomButton onClick={this.handleSubmit1} type="button">
+                {' '}
+                Submit Form{' '}
+              </CustomButton>
               <CustomButton onClick={signInWithGoogle} isGoogleSignIn>
                 Sign IN With Google
               </CustomButton>
