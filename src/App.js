@@ -13,6 +13,7 @@ import SignInAndSignOut from './pages/sign-in-and-sign-out/sign-in-and-sign-out.
 import Header from './components/header/header.component.jsx';
 
 import { setCurrentUser } from './redux/user/user.actions';
+import CollectionPage from './pages/collection/collection.component';
 
 class App extends Component {
   constructor() {
@@ -66,6 +67,7 @@ class App extends Component {
             }
           />
           <Route exact path="/shop" component={shopPage} />
+          <Route exact path="/shop/:collectionId" component={CollectionPage} />
           <Route exact path="/checkout" component={CheckoutPage} />
         </Switch>
 
