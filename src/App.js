@@ -2,18 +2,20 @@ import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
 
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import { auth, createUserProfileDocument, addCollectionAndDocument } from './firebase/firebase.utils';
 
 import { Switch, Route, Redirect } from 'react-router-dom';
 import HomePage from './pages/homepage.component';
 import shopPage from './pages/shop/shop.component';
 import CheckoutPage from './pages/checkout/checkcout.component';
 import SignInAndSignOut from './pages/sign-in-and-sign-out/sign-in-and-sign-out.component';
-
+import { createStructuredSelector } from 'reselect';
 import Header from './components/header/header.component.jsx';
 
 import { setCurrentUser } from './redux/user/user.actions';
 import CollectionPage from './pages/collection/collection.component';
+import { selectCollectionsForPreview } from './redux/shop/shop.selector'
+import { selectCurrentUser } from './redux/user/user.selectors';
 
 class App extends Component {
   constructor() {
@@ -26,7 +28,7 @@ class App extends Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser } = this.props;
+    const { setCurrentUser, collectionArray } = this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
@@ -43,6 +45,7 @@ class App extends Component {
       }
 
       setCurrentUser(userAuth);
+      // addCollectionAndDocument('collections', collectionArray.map(({title, items}) => ({title, items})))
     });
   }
 
@@ -77,11 +80,17 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    currentUser: state.user.currentUser,
-  };
-};
+// const mapStateToProps = state => {
+//   return {
+//     currentUser: state.user.currentUser,
+//   };
+// };
+
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+  collectionArray : selectCollectionsForPreview
+});
+
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
